@@ -1,0 +1,74 @@
+cmake_minimum_required(VERSION 2.8.3)
+project(supertoroid)
+
+## Compile as C++11, supported in ROS Kinetic and newer
+# add_compile_options(-std=c++11)
+
+## Find catkin macros and libraries
+## if COMPONENTS list like find_package(catkin REQUIRED COMPONENTS xyz)
+## is used, also find other catkin packages
+find_package(catkin REQUIRED COMPONENTS
+  roscpp
+  message_generation
+  geometry_msgs
+  pcl_ros
+  pcl_conversions
+  eigen_conversions
+  sensor_msgs
+)
+
+## System dependencies are found with CMake's conventions
+find_package(Boost REQUIRED COMPONENTS system)
+find_package(PCL 1.8 REQUIRED)
+find_package(OpenCV REQUIRED)
+
+## Generate messages in the 'msg' folder
+add_message_files(
+   FILES
+   st.msg
+ )
+
+## Generate added messages and services with any dependencies listed here
+generate_messages(
+  DEPENDENCIES
+  std_msgs
+  geometry_msgs
+  sensor_msgs
+)
+
+catkin_package(
+  INCLUDE_DIRS
+      include
+  LIBRARIES
+      st_sampling
+      util
+  CATKIN_DEPENDS roscpp message_runtime
+  DEPENDS system_lib
+)
+
+
+IF (PCL_FOUND)
+  INCLUDE_DIRECTORIES(${PCL_INCLUDE_DIRS})
+  LINK_DIRECTORIES(${PCL_LIBRARY_DIRS})
+  ADD_DEFINITIONS(${PCL_DEFINITIONS})
+ENDIF (PCL_FOUND)
+
+include_directories(include ${catkin_INCLUDE_DIRS}  ${PCL_INCLUDE_DIR} )
+include_directories(${catkin_INCLUDE_DIRS} ${freenect2_INCLUDE_DIRS})
+
+add_library(st_sampling  src/supertoroid/st_sampling.cpp)
+add_library(util  src/supertoroid/util.cpp)
+
+target_link_libraries(st_sampling  ${catkin_LIBRARIES}  ${PCL_LIBRARY_DIRS})
+target_link_libraries(util  ${catkin_LIBRARIES}  ${PCL_LIBRARY_DIRS})
+
+
+install(TARGETS st_sampling util
+ ARCHIVE DESTINATION ${CATKIN_PACKAGE_LIB_DESTINATION}
+ LIBRARY DESTINATION ${CATKIN_PACKAGE_LIB_DESTINATION}
+)
+
+#executables for tests
+add_executable(st_sampling_test_pcd src/test/st_sampling_test_pcd.cpp)
+add_dependencies(st_sampling_test_pcd ${${PROJECT_NAME}_EXPORTED_TARGETS} ${catkin_EXPORTED_TARGETS})
+target_link_libraries(st_sampling_test_pcd st_sampling  ${catkin_LIBRARIES})
