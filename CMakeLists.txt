@@ -41,6 +41,7 @@ catkin_package(
       include
   LIBRARIES
       st_sampling
+      st_fitting
       util
   CATKIN_DEPENDS roscpp message_runtime
   DEPENDS system_lib
@@ -57,9 +58,11 @@ include_directories(include ${catkin_INCLUDE_DIRS}  ${PCL_INCLUDE_DIR} )
 include_directories(${catkin_INCLUDE_DIRS} ${freenect2_INCLUDE_DIRS})
 
 add_library(st_sampling  src/supertoroid/st_sampling.cpp)
+add_library(st_fitting  src/supertoroid/st_fitting.cpp)
 add_library(util  src/supertoroid/util.cpp)
 
 target_link_libraries(st_sampling  ${catkin_LIBRARIES}  ${PCL_LIBRARY_DIRS})
+target_link_libraries(st_fitting  ${catkin_LIBRARIES}  ${PCL_LIBRARY_DIRS})
 target_link_libraries(util  ${catkin_LIBRARIES}  ${PCL_LIBRARY_DIRS})
 
 

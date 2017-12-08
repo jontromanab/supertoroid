@@ -33,4 +33,30 @@ void create_transformation_matrix(const double tx, const double ty, const double
   trans_mat = translation_matrix * rot_matrix;
 }
 
+
+void st_clampParameters(double& e1_clamped, double& e2_clamped)
+{
+  if(e1_clamped < 0.1)
+    e1_clamped = 0.1;
+  else if(e1_clamped > 1.9)
+    e1_clamped = 1.9;
+  if(e2_clamped < 0.1)
+    e2_clamped = 0.1;
+  else if(e2_clamped > 1.9)
+    e2_clamped = 1.9;
+}
+
+double st_function(const PointT& point, const sq_fitting::sq &param)
+{
+  double e1_clamped = param.e1;
+  double e2_clamped = param.e2;
+  sq_clampParameters(e1_clamped, e2_clamped);
+  double t1 = pow(std::abs(point.x / param.a1), 2.0/e2_clamped);
+  double t2 = pow(std::abs(point.y / param.a2), 2.0/e2_clamped);
+  double t3 = pow(std::abs(point.z / param.a3), 2.0/e1_clamped);
+  double f = pow(std::abs(t1+t2), e2_clamped/e1_clamped) + t3;
+  return (pow(f,e1_clamped) - 1.0 );
+}
+
+
 #endif // UTIL_H
