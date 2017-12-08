@@ -14,6 +14,7 @@ class Sampling{
 public:
   Sampling(const supertoroid::st& st_params);
   void sample();
+  void sample_pilu_fisher();
 
 
   void getCloud(pcl::PointCloud<PointT>::Ptr& cloud);
@@ -26,6 +27,9 @@ private:
   float r_, g_, b_;
   void transformCloud(const pcl::PointCloud<PointT>::Ptr &input_cloud,
                       pcl::PointCloud<PointT>::Ptr& output_cloud);
+
+  void sample_superEllipse(const double a1, const double a2, const double a4,
+                           const double e, const int N, pcl::PointCloud<PointT>::Ptr &cloud);
 
 };
 
