@@ -9,6 +9,7 @@ Segmentation::Segmentation(const CloudPtr &input_cloud, const Parameters &param)
   this->zmax_ = param.zmax;
   this->th_points_ = param.th_points;
   this->initialized = true;
+  this->ws_filter_ = false;
 }
 
 Segmentation::Segmentation(const CloudPtr &input_cloud, const Parameters &param,const ws_Parameters& ws_param)
@@ -91,7 +92,7 @@ void Segmentation::getTablecloud(CloudPtr &table_cloud){
 }
 
 void Segmentation::getObjectsOnTable(CloudPtr &objects_on_table){
-  objects_on_table = objects_on_table;
+  objects_on_table = objects_on_table_;
 }
 
 bool Segmentation::segment(){
