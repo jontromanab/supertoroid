@@ -22,10 +22,20 @@ public:
     double zmin;
     double zmax;
     int th_points;
-  }
+  };
+  struct ws_Parameters{
+    double min_x;
+    double max_x;
+    double min_y;
+    double max_y;
+    double min_z;
+    double max_z;
+  };
   Segmentation(const CloudPtr& input_cloud, const Parameters& param);
+  Segmentation(const CloudPtr &input_cloud, const Parameters &param, const ws_Parameters& ws_param);
   bool segment();
   bool initialized;
+  bool ws_filter_;
   void getTablecloud(CloudPtr &table_cloud);
   void getObjectsOnTable(CloudPtr& objects_on_table);
 
@@ -43,6 +53,8 @@ private:
   double zmin_;
   double zmax_;
   int th_points_;
+
+  double min_x_, max_x_, min_y_, max_y_, min_z_, max_z_;
 
 };
 
