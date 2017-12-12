@@ -30,7 +30,7 @@ public:
   void getObjectsOnTable(CloudPtr& objects_on_table);
 
 private:
-  void detecObjectsOntable(CloudPtr cloud, double zmin, double zmax, bool filteR_input_cloud);
+  void detectObjectsOntable(CloudPtr cloud, double zmin, double zmax, bool filter_input_cloud);
 
 
   CloudPtr cloud_;
