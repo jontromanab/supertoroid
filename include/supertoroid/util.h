@@ -58,6 +58,42 @@ double st_function(const PointT& point, const supertoroid::st& param)
   return (pow(f,e1_clamped) - 1.0 );
 }
 
+double st_normPoint(const PointT &point){
+  double value = sqrt(point.x * point.x + point.y * point.y + point.z * point.z );
+  return value;
+}
+
+double st_function_scale_weighting(const PointT& point, const supertoroid::st& param){
+  double e1_clamped = param.e1;
+  double e2_clamped = param.e2;
+  st_clampParameters(e1_clamped, e2_clamped);
+  double t1 = pow(std::abs(point.x / param.a1), 2.0/e2_clamped);
+  double t2 = pow(std::abs(point.y / param.a2), 2.0/e2_clamped);
+  double t3 = pow(std::abs(point.z / param.a3), 2.0/e1_clamped);
+  double f = (pow(std::abs(t1+t2), e2_clamped/e1_clamped)  - param.a4)+ t3;
+  double value = (pow(f, e1_clamped/2.0) - 1.0) * pow(param.a1 * param.a2 * param.a3, 0.25);
+  return (value);
+}
+
+double st_error(const pcl::PointCloud<PointT>::Ptr cloud, const supertoroid::st &param){
+  Eigen::Affine3f transform;
+  pose_to_transform(param.pose, transform);
+  pcl::PointCloud<PointT>::Ptr new_cloud(new pcl::PointCloud<PointT>);
+  pcl::transformPointCloud(*cloud, *new_cloud, transform);
+  double error = 0.0;
+  for(size_t i=0;i<new_cloud->size();++i){
+    double op =st_normPoint(new_cloud->at(i));
+    double val = op * st_function_scale_weighting(new_cloud->at(i), param);
+    error += val * val;
+  }
+  error /=new_cloud->size();
+  return error;
+}
+
+
+
+
+
 double st_function(const double &x, const double &y, const double &z, const double &a, const double &b, const double &c, const double &d, const double &e1,
                    const double &e2)
 {
@@ -72,7 +108,20 @@ double st_function(const double &x, const double &y, const double &z, const doub
   double f = (pow(std::abs(t1+t2), e2_clamped/e1_clamped)  - d)+ t3;
   double value = (pow(f, e1_clamped/2.0) - 1.0) * pow(a * b * c, 0.25);
   return (value);
-
 }
+
+void getParamFromTransform(const Eigen::Affine3d& trans, double& tx, double& ty, double& tz, double& ax,
+                           double& ay, double& az){
+  Eigen::Vector3d t = trans.translation();
+  Eigen::Matrix3d rot_matrix = trans.rotation();
+  tx = t(0);
+  ty = t(1);
+  tz = t(2);
+  Eigen::Vector3d rot_angle = rot_matrix.eulerAngles(0,1,2);
+  ax = rot_angle[0];
+  ay = rot_angle[1];
+  az = rot_angle[2];
+}
+
 
 #endif // UTIL_H
