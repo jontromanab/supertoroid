@@ -10,10 +10,10 @@ int main(int argc, char *argv[])
   pcl::PointCloud<PointT>::Ptr cloud_combined(new pcl::PointCloud<PointT>());
 
   supertoroid::st super1;
-  super1.a1 = 0.05;
-  super1.a2 = 0.05;
-  super1.a3 = 0.05;
-  super1.a4 = 1.0;
+  super1.a1 = 0.1;
+  super1.a2 = 0.1;
+  super1.a3 = 0.1;
+  super1.a4 = 0.0;
   super1.e1 = 1.0;
   super1.e2 = 1.0;
   geometry_msgs::Pose pose;
@@ -25,10 +25,10 @@ int main(int argc, char *argv[])
 
 
   supertoroid::st super2;
-  super2.a1 = 0.05;
-  super2.a2 = 0.05;
-  super2.a3 = 0.05;
-  super2.a4 = 1.0;
+  super2.a1 = 0.1;
+  super2.a2 = 0.1;
+  super2.a3 = 0.1;
+  super2.a4 = 1.5;
   super2.e1 = 1.0;
   super2.e2 = 1.0;
   geometry_msgs::Pose pose2;

@@ -27,6 +27,64 @@ void Sampling::getCloud(pcl::PointCloud<PointT>::Ptr &cloud)
   cloud = cloud_;
 }
 
+/*void Sampling::sample()
+{
+  pcl::PointCloud<PointT>::Ptr cloud(new pcl::PointCloud<PointT>);
+    double cn, sn, sw, cw;
+    double n,w;
+    int num_n, num_w;
+    double dn, dw;
+    dn = 2*M_PI/180.0;
+    dw =2* M_PI/180.0;
+    num_n = (int)(2*M_PI/dn);
+    num_w = (int)(2*M_PI/dw);
+    n = -180.0;;
+    for(int i=0;i<360;++i)
+    {
+      n+=dn;
+      cn = cos(i*M_PI/180.0);
+      sn = sin(i*M_PI/180.0);
+      w = -180.0;
+      for(int j=0;j<360;++j)
+      {
+        w+=dw;
+        cw = cos(j*M_PI/180.0);
+        sw = sin(j*M_PI/180.0);
+        PointT p;
+
+
+        p.x = params_.a1 * (params_.a4+pow(fabs(cn), params_.e1)) * pow (fabs(cw), params_.e2);
+        p.y = params_.a2 * (params_.a4+pow(fabs(cn), params_.e1)) * pow (fabs(sw), params_.e2);
+        p.z = params_.a3 * pow(fabs(sn), params_.e1);
+        p.r =  r_*255;
+        p.g = g_*255;
+        p.b = b_*255;
+
+
+
+        if(cn*cw <0){p.x = -p.x;}
+        if(cn*sw <0){p.y = -p.y;}
+        if(sn<0){p.z = -p.z;}
+
+        if(cw<0)
+        {
+          p.x = p.x-params_.a1*params_.a4*pow (fabs(cw), params_.e2);
+
+        }
+
+        if(sw<0)
+        {
+          p.y = p.y-params_.a2*params_.a4*pow (fabs(sw), params_.e2);
+        }
+        cloud->points.push_back(p);
+        cloud->height = 1;
+        cloud->width = cloud->points.size();
+        cloud->is_dense = true;
+      }
+    }
+    transformCloud(cloud, cloud_);
+}*/
+
 void Sampling::sample()
 {
   pcl::PointCloud<PointT>::Ptr cloud(new pcl::PointCloud<PointT>);
@@ -34,17 +92,17 @@ void Sampling::sample()
     double n,w;
     int num_n, num_w;
     double dn, dw;
-    dn = 5.0 * M_PI/180.0;
-    dw = 5.0 * M_PI/180.0;
-    num_n = (int)(M_PI/dn);
+    dn =  M_PI/180.0;
+    dw =  M_PI/180.0;
+    num_n = (int)(2*M_PI/dn);
     num_w = (int)(2*M_PI/dw);
-    n = -M_PI/2.0;
+    n = 0.0;
     for(int i=0;i<num_n;++i)
     {
       n+=dn;
       cn = cos(n);
       sn = sin(n);
-      w = -M_PI;
+      w = 0.0;
       for(int j=0;j<num_w;++j)
       {
         w+=dw;
@@ -58,6 +116,17 @@ void Sampling::sample()
         p.g = g_*255;
         p.b = b_*255;
 
+
+        if(cn<0 && cw>0){p.x = p.x - 3.*params_.a1*params_.a4*pow (fabs(cw), params_.e2);}
+        if(cn<0 && cw<0){p.x = p.x - 3.*params_.a1*params_.a4*pow (fabs(cw), params_.e2);}
+        if(cn>0 && cw<0){p.x = p.x + params_.a1*params_.a4*pow (fabs(cw), params_.e2);}
+        if(cn>0 && cw>0){p.x = p.x + params_.a1*params_.a4*pow (fabs(cw), params_.e2);}
+
+        if(cn<0 && sw>0){p.y = p.y - 3.*params_.a2*params_.a4*pow (fabs(sw), params_.e2);}
+        if(cn<0 && sw<0){p.y = p.y - 3.*params_.a2*params_.a4*pow (fabs(sw), params_.e2);}
+        if(cn>0 && sw<0){p.y = p.y + params_.a2*params_.a4*pow (fabs(sw), params_.e2);}
+        if(cn>0 && sw>0){p.y = p.y + params_.a2*params_.a4*pow (fabs(sw), params_.e2);}
+
         if(cn*cw <0){p.x = -p.x;}
         if(cn*sw <0){p.y = -p.y;}
         if(sn<0){p.z = -p.z;}
@@ -69,6 +138,7 @@ void Sampling::sample()
     }
     transformCloud(cloud, cloud_);
 }
+
 
 double dTheta_0(double K, double e, double a1, double a2, double t)
 {
