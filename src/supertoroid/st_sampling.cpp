@@ -87,6 +87,7 @@ void Sampling::getCloud(pcl::PointCloud<PointT>::Ptr &cloud)
 
 void Sampling::sample()
 {
+  //We are not going to use any more pilu-fisher. The only problem is sampling in the middle. 
   pcl::PointCloud<PointT>::Ptr cloud(new pcl::PointCloud<PointT>);
     double cn, sn, sw, cw;
     double n,w;
