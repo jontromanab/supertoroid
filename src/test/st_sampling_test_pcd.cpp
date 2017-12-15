@@ -24,19 +24,20 @@ int main(int argc, char *argv[])
   super1.pose = pose;
 
 
+
   supertoroid::st super2;
-  super2.a1 = 0.1;
-  super2.a2 = 0.1;
-  super2.a3 = 0.1;
-  super2.a4 = 1.5;
-  super2.e1 = 1.0;
-  super2.e2 = 1.0;
-  geometry_msgs::Pose pose2;
-  pose2.position.x = 0.3;
-  pose2.position.y = 0.0;
-  pose2.position.z = 0.0;
-  pose2.orientation.w = 1.0;
-  super2.pose = pose2;
+    super2.a1 = 0.1;
+    super2.a2 = 0.1;
+    super2.a3 = 0.1;
+    super2.a4 = 1.5;
+    super2.e1 = 1.0;
+    super2.e2 = 1.0;
+    geometry_msgs::Pose pose2;
+    pose2.position.x = 0.3;
+    pose2.position.y = 0.0;
+    pose2.position.z = 0.0;
+    pose2.orientation.w = 1.0;
+    super2.pose = pose2;
 
   Sampling *samp = new Sampling(super1);
   samp->sample_pilu_fisher();
