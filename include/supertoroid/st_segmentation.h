@@ -21,8 +21,7 @@ public:
   struct Parameters{
     double zmin;
     double zmax;
-    int th_points;
-  };
+    };
   struct ws_Parameters{
     double min_x;
     double max_x;
@@ -52,7 +51,7 @@ private:
 
   double zmin_;
   double zmax_;
-  int th_points_;
+
 
   double min_x_, max_x_, min_y_, max_y_, min_z_, max_z_;
 

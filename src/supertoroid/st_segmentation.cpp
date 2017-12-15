@@ -7,7 +7,6 @@ Segmentation::Segmentation(const CloudPtr &input_cloud, const Parameters &param)
   cloud_ = input_cloud;
   this->zmin_ = param.zmin;
   this->zmax_ = param.zmax;
-  this->th_points_ = param.th_points;
   this->initialized = true;
   this->ws_filter_ = false;
 }
@@ -17,7 +16,6 @@ Segmentation::Segmentation(const CloudPtr &input_cloud, const Parameters &param,
   cloud_ = input_cloud;
   this->zmin_ = param.zmin;
   this->zmax_ = param.zmax;
-  this->th_points_ = param.th_points;
   this->initialized = true;
 
   this->min_x_ = ws_param.min_x;
@@ -45,11 +43,11 @@ void Segmentation::detectObjectsOntable(CloudPtr cloud, double zmin, double zmax
     crop.setMax(max);
     crop.filter(*cloud_nan);
     std::vector<int> indices;
-    pcl::removeNaNFromPointCloud(*cloud_nan, *filtered_cloud, indices);
-    seg.setInputCloud(filtered_cloud);
+    pcl::removeNaNFromPointCloud(*cloud_nan, *table_plane_cloud_, indices);
+    //seg.setInputCloud(filtered_cloud);
   }
 
-  else
+  /*else
     seg.setInputCloud(cloud);
   seg.setModelType(pcl::SACMODEL_PLANE);
   seg.setMethodType(pcl::SAC_RANSAC);
@@ -66,7 +64,7 @@ void Segmentation::detectObjectsOntable(CloudPtr cloud, double zmin, double zmax
     extract.filter(*table_plane_cloud_);
 
 
-    pcl::ConvexHull<PointT> hull;
+    /*pcl::ConvexHull<PointT> hull;
     hull.setInputCloud(cloud);
     hull.setDimension(2);
     hull.reconstruct(this->convexHull_);
@@ -84,7 +82,7 @@ void Segmentation::detectObjectsOntable(CloudPtr cloud, double zmin, double zmax
         objects_on_table_ = cloud;
       }
     }
-  }
+  }*/
 }
 
 void Segmentation::getTablecloud(CloudPtr &table_cloud){
