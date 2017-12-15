@@ -78,3 +78,7 @@ install(TARGETS st_sampling st_segmentation st_fitting util
 add_executable(st_sampling_test_pcd src/test/st_sampling_test_pcd.cpp)
 add_dependencies(st_sampling_test_pcd ${${PROJECT_NAME}_EXPORTED_TARGETS} ${catkin_EXPORTED_TARGETS})
 target_link_libraries(st_sampling_test_pcd st_sampling  ${catkin_LIBRARIES})
+
+
+add_executable(openni_grabber src/test/openni_grabber.cpp)
+target_link_libraries(openni_grabber  ${catkin_LIBRARIES} ${PCL_LIBRARIES})
