@@ -44,7 +44,7 @@ void Segmentation::detectObjectsOntable(CloudPtr cloud, double zmin, double zmax
     crop.filter(*cloud_nan);
     std::vector<int> indices;
     pcl::removeNaNFromPointCloud(*cloud_nan, *table_plane_cloud_, indices);
-    //seg.setInputCloud(filtered_cloud);
+    seg.setInputCloud(filtered_cloud);
   }
 
   /*else
