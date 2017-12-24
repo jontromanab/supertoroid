@@ -37,6 +37,13 @@ int main(int argc, char * argv[])
 
   pcl::io::savePCDFileASCII("table_cloud.pcd", *table_cloud);
   std::cerr<<"Saved "<<table_cloud->points.size()<<" data pointst to table_cloud.pcd"<<std::endl;
+  
+  pcl::PointCloud<pcl::PointXYZRGB>::Ptr object_cloud(new pcl::PointCloud<pcl::PointXYZRGB>());
+  seg->getObjectsOnTable(object_cloud);
+  std::cout<<"Size of object cloud: "<<object_cloud->points.size()<<std::endl;
+
+  pcl::io::savePCDFileASCII("object_cloud.pcd", *object_cloud);
+  std::cerr<<"Saved "<<object_cloud->points.size()<<" data pointst to object_cloud.pcd"<<std::endl;
 
 
   return 0;
