@@ -4,6 +4,7 @@
 #include<pcl/io/pcd_io.h>
 #include<pcl/point_types.h>
 
+//Need sample table scene pcd
 int main(int argc, char * argv[])
 {
   if(argc!=2)
