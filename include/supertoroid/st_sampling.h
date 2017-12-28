@@ -14,6 +14,7 @@ class Sampling{
 public:
   Sampling(const supertoroid::st& st_params);
   void sample();
+  void sample_proper();
   void sample_pilu_fisher();
 
 

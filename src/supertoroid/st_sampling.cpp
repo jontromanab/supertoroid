@@ -85,6 +85,51 @@ void Sampling::sample()
 }
 
 
+void Sampling::sample_proper()
+{
+  pcl::PointCloud<PointT>::Ptr cloud(new pcl::PointCloud<PointT>);
+    double cn, sn, sw, cw;
+    double n,w;
+    int num_n, num_w;
+    double dn, dw;
+    dn =  M_PI/180.0;
+    dw =  M_PI/180.0;
+    num_n = (int)(2.0*(M_PI/dn));
+    num_w = (int)(2.0*(M_PI/dw));
+    n = 0.0;
+    for(int i=0;i<num_n;++i)
+    {
+      n+=dn;
+      cn = cos(n);
+      sn = sin(n);
+      w = 0.0;
+      for(int j=0;j<num_w;++j)
+      {
+        w+=dw;
+        cw = cos(w);
+        sw = sin(w);
+        PointT p;
+
+        p.x = params_.a1 * (params_.a4+pow(cn, params_.e1)) * pow (fabs(cw), params_.e2);
+        p.y = params_.a2 * (params_.a4+pow(cn, params_.e1)) * pow (fabs(sw), params_.e2);
+        p.z = params_.a3 * pow(fabs(sn), params_.e1);
+        p.r =  r_*255;
+        p.g = g_*255;
+        p.b = b_*255;
+
+        if(cn*cw <0){p.x = -p.x;}
+        if(cn*sw <0){p.y = -p.y;}
+        if(sn<0){p.z = -p.z;}
+        cloud->points.push_back(p);
+        cloud->height = 1;
+        cloud->width = cloud->points.size();
+        cloud->is_dense = true;
+      }
+    }
+    transformCloud(cloud, cloud_);
+}
+
+
 double dTheta_0(double K, double e, double a1, double a2, double t)
 {
   double factor = K/a2 - pow(t,e);
