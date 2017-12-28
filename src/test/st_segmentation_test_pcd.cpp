@@ -4,7 +4,6 @@
 #include<pcl/io/pcd_io.h>
 #include<pcl/point_types.h>
 
-//Need sample table scene pcd
 int main(int argc, char * argv[])
 {
   if(argc!=2)
@@ -32,19 +31,23 @@ int main(int argc, char * argv[])
   Segmentation* seg = new Segmentation(cloud, params, ws_params);
   seg->segment();
 
+  pcl::PointCloud<pcl::PointXYZRGB>::Ptr ws_cloud(new pcl::PointCloud<pcl::PointXYZRGB>());
+  seg->getWsCloud(ws_cloud);
+  std::cout<<"Size of workspace cloud: "<<ws_cloud->points.size()<<std::endl;
+  pcl::io::savePCDFileASCII("workspace_cloud.pcd", *ws_cloud);
+  std::cerr<<"Saved "<<ws_cloud->points.size()<<" data points to workspace_cloud.pcd"<<std::endl;
+
   pcl::PointCloud<pcl::PointXYZRGB>::Ptr table_cloud(new pcl::PointCloud<pcl::PointXYZRGB>());
   seg->getTablecloud(table_cloud);
   std::cout<<"Size of table cloud: "<<table_cloud->points.size()<<std::endl;
-
   pcl::io::savePCDFileASCII("table_cloud.pcd", *table_cloud);
-  std::cerr<<"Saved "<<table_cloud->points.size()<<" data pointst to table_cloud.pcd"<<std::endl;
-  
-  pcl::PointCloud<pcl::PointXYZRGB>::Ptr object_cloud(new pcl::PointCloud<pcl::PointXYZRGB>());
-  seg->getObjectsOnTable(object_cloud);
-  std::cout<<"Size of object cloud: "<<object_cloud->points.size()<<std::endl;
+  std::cerr<<"Saved "<<table_cloud->points.size()<<" data points to table_cloud.pcd"<<std::endl;
 
+  /*pcl::PointCloud<pcl::PointXYZRGB>::Ptr object_cloud(new pcl::PointCloud<pcl::PointXYZRGB>());
+  seg->getObjectsOnTable(object_cloud);
+  std::cout<<"Size of table cloud: "<<object_cloud->points.size()<<std::endl;
   pcl::io::savePCDFileASCII("object_cloud.pcd", *object_cloud);
-  std::cerr<<"Saved "<<object_cloud->points.size()<<" data pointst to object_cloud.pcd"<<std::endl;
+  std::cerr<<"Saved "<<object_cloud->points.size()<<" data points to object_cloud.pcd"<<std::endl;*/
 
 
   return 0;

@@ -35,14 +35,17 @@ public:
   bool segment();
   bool initialized;
   bool ws_filter_;
-  void getTablecloud(CloudPtr &table_cloud);
-  void getObjectsOnTable(CloudPtr& objects_on_table);
+  void getTablecloud(CloudPtr &table_cloud) const;
+  void getObjectsOnTable(CloudPtr& objects_on_table) const;
+  void getWsCloud(CloudPtr& ws_cloud) const ;
 
 private:
   void detectObjectsOntable(CloudPtr cloud, double zmin, double zmax, bool filter_input_cloud);
 
 
   CloudPtr cloud_;
+  CloudPtr filtered_cloud_;
+  CloudPtr ws_cloud_;
   CloudPtr table_plane_cloud_;
   CloudPtr objects_on_table_;
 

@@ -12,7 +12,8 @@ Segmentation::Segmentation(const CloudPtr &input_cloud, const Parameters &param)
 }
 
 Segmentation::Segmentation(const CloudPtr &input_cloud, const Parameters &param,const ws_Parameters& ws_param)
-  :table_plane_cloud_(new PointCloud), objects_on_table_(new PointCloud){
+  :table_plane_cloud_(new PointCloud), objects_on_table_(new PointCloud), ws_cloud_(new PointCloud), filtered_cloud_
+(new PointCloud){
   cloud_ = input_cloud;
   this->zmin_ = param.zmin;
   this->zmax_ = param.zmax;
@@ -32,7 +33,6 @@ void Segmentation::detectObjectsOntable(CloudPtr cloud, double zmin, double zmax
   pcl::SACSegmentation<PointT> seg;
   if(ws_filter_){
     CloudPtr cloud_nan(new PointCloud);
-    CloudPtr filtered_cloud(new PointCloud);
     pcl::CropBox<PointT> crop;
     crop.setInputCloud(cloud);
     Eigen::Vector4f min;
@@ -43,12 +43,13 @@ void Segmentation::detectObjectsOntable(CloudPtr cloud, double zmin, double zmax
     crop.setMax(max);
     crop.filter(*cloud_nan);
     std::vector<int> indices;
-    pcl::removeNaNFromPointCloud(*cloud_nan, *table_plane_cloud_, indices);
-    seg.setInputCloud(filtered_cloud);
+    pcl::removeNaNFromPointCloud(*cloud_nan, *filtered_cloud_, indices);
+    ws_cloud_ = filtered_cloud_;
+    seg.setInputCloud(filtered_cloud_);
   }
 
-  /*else
-    seg.setInputCloud(cloud);
+  else  seg.setInputCloud(cloud);
+  std::cout<<"We are here: "<<std::endl;
   seg.setModelType(pcl::SACMODEL_PLANE);
   seg.setMethodType(pcl::SAC_RANSAC);
   seg.setDistanceThreshold(0.01);
@@ -59,38 +60,57 @@ void Segmentation::detectObjectsOntable(CloudPtr cloud, double zmin, double zmax
     std::cout<<"Could not find a plane"<<std::endl;
   else{
     pcl::ExtractIndices<PointT> extract;
-    extract.setInputCloud(cloud);
+    if(ws_filter_)extract.setInputCloud(filtered_cloud_);
+    else extract.setInputCloud(cloud);
     extract.setIndices(planeIndices);
     extract.filter(*table_plane_cloud_);
 
 
     /*pcl::ConvexHull<PointT> hull;
-    hull.setInputCloud(cloud);
+    if(ws_filter_) hull.setInputCloud(filtered_cloud_);
+    else hull.setInputCloud(cloud);
+
     hull.setDimension(2);
     hull.reconstruct(this->convexHull_);
 
     if(hull.getDimension()==2)
     {
       pcl::ExtractPolygonalPrismData<PointT> prism;
-      prism.setInputCloud(cloud);
+      if(ws_filter_) prism.setInputCloud(filtered_cloud_);
+      else prism.setInputCloud(cloud);
+
       prism.setInputPlanarHull(convexHull_.makeShared());
       prism.setHeightLimits(zmin, zmax);
       pcl::PointIndices::Ptr obj_idx(new pcl::PointIndices());
       prism.segment(*obj_idx);
+      extract.filter(*cloud);
+      objects_on_table_ = cloud;
       if(filter_input_cloud){
-        extract.filter(*cloud);
-        objects_on_table_ = cloud;
+        if(ws_filter_)
+        {
+          extract.filter(*filtered_cloud_);
+          objects_on_table_ = filtered_cloud_;
+        }
+        else
+        {
+          extract.filter(*cloud);
+          objects_on_table_ = cloud;
+        }
       }
-    }
-  }*/
+    }*/
+  }
 }
 
-void Segmentation::getTablecloud(CloudPtr &table_cloud){
+void Segmentation::getTablecloud(CloudPtr &table_cloud) const {
   table_cloud = table_plane_cloud_;
 }
 
-void Segmentation::getObjectsOnTable(CloudPtr &objects_on_table){
+void Segmentation::getObjectsOnTable(CloudPtr &objects_on_table) const{
   objects_on_table = objects_on_table_;
+}
+
+void Segmentation::getWsCloud(CloudPtr &ws_cloud) const {
+  ws_cloud = ws_cloud_;
 }
 
 bool Segmentation::segment(){
