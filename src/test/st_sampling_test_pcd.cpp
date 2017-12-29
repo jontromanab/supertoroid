@@ -13,7 +13,7 @@ int main(int argc, char *argv[])
   super1.a1 = 0.1;
   super1.a2 = 0.1;
   super1.a3 = 0.1;
-  super1.a4 = 0.0;
+  super1.a4 = 2.0;
   super1.e1 = 1.0;
   super1.e2 = 1.0;
   geometry_msgs::Pose pose;
