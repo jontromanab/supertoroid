@@ -29,6 +29,10 @@ void Sampling::getCloud(pcl::PointCloud<PointT>::Ptr &cloud)
 
 
 
+double signof(double a) { return (a == 0) ? 0 : (a<0 ? -1 : 1); }
+
+
+
 void Sampling::sample()
 {
   pcl::PointCloud<PointT>::Ptr cloud(new pcl::PointCloud<PointT>);
@@ -54,8 +58,8 @@ void Sampling::sample()
         sw = sin(w);
         PointT p;
 
-        p.x = params_.a1 * (params_.a4+pow(cn, params_.e1)) * pow (fabs(cw), params_.e2);
-        p.y = params_.a2 * (params_.a4+pow(cn, params_.e1)) * pow (fabs(sw), params_.e2);
+        p.x = params_.a1 * (params_.a4+signof(cn)*pow(fabs(cn), params_.e1)) * pow (fabs(cw), params_.e2);
+        p.y = params_.a2 * (params_.a4+signof(cn)*pow(fabs(cn), params_.e1)) * pow (fabs(sw), params_.e2);
         p.z = params_.a3 * pow(fabs(sn), params_.e1);
         p.r =  r_*255;
         p.g = g_*255;

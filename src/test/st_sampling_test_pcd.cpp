@@ -13,7 +13,7 @@ int main(int argc, char *argv[])
   super1.a1 = 0.1;
   super1.a2 = 0.1;
   super1.a3 = 0.1;
-  super1.a4 = 2.0;
+  super1.a4 = 0.0;
   super1.e1 = 1.0;
   super1.e2 = 1.0;
   geometry_msgs::Pose pose;
@@ -30,8 +30,8 @@ int main(int argc, char *argv[])
   super2.a2 = 0.1;
   super2.a3 = 0.1;
   super2.a4 = 2.0;
-  super2.e1 = 1.0;
-  super2.e2 = 0.5
+  super2.e1 = 0.5;
+  super2.e2 = 1.0;
   geometry_msgs::Pose pose2;
   pose2.position.x = 0.3;
   pose2.position.y = 0.0;
@@ -45,7 +45,7 @@ int main(int argc, char *argv[])
   super3.a3 = 0.1;
   super3.a4 = 2.0;
   super3.e1 = 1.0;
-  super3.e2 = 1.0
+  super3.e2 = 0.5;
   geometry_msgs::Pose pose3;
   pose3.position.x = -0.3;
   pose3.position.y = 0.0;
@@ -53,12 +53,12 @@ int main(int argc, char *argv[])
   pose3.orientation.w = 1.0;
   super3.pose = pose3;
 
-  Sampling *samp = new Sampling(super1);
+  /*Sampling *samp = new Sampling(super1);
   samp->sample_pilu_fisher();
   pcl::PointCloud<PointT>::Ptr cloud(new pcl::PointCloud<PointT>);
   samp->getCloud(cloud);
   std::cout<<"Size of the first sampled cloud: "<<cloud->points.size()<<std::endl;
-  *cloud_combined+= *cloud;
+  *cloud_combined+= *cloud;*/
 
   Sampling *samp2 = new Sampling(super2);
   samp2->sample_proper();
