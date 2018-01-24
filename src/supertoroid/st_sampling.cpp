@@ -65,17 +65,6 @@ void Sampling::sample()
         p.g = g_*255;
         p.b = b_*255;
 
-
-        /*if(cn<0 && cw>0){p.x = p.x - params_.a1*params_.a4*pow (fabs(cw), params_.e2);}
-        if(cn<0 && cw<0){p.x = p.x - params_.a1*params_.a4*pow (fabs(cw), params_.e2);}
-        if(cn>0 && cw<0){p.x = p.x + params_.a1*params_.a4*pow (fabs(cw), params_.e2);}
-        if(cn>0 && cw>0){p.x = p.x + params_.a1*params_.a4*pow (fabs(cw), params_.e2);}
-
-        if(cn<0 && sw>0){p.y = p.y - params_.a2*params_.a4*pow (fabs(sw), params_.e2);}
-        if(cn<0 && sw<0){p.y = p.y - params_.a2*params_.a4*pow (fabs(sw), params_.e2);}
-        if(cn>0 && sw<0){p.y = p.y + params_.a2*params_.a4*pow (fabs(sw), params_.e2);}
-        if(cn>0 && sw>0){p.y = p.y + params_.a2*params_.a4*pow (fabs(sw), params_.e2);}*/
-
         if(cn*cw <0){p.x = -p.x;}
         if(cn*sw <0){p.y = -p.y;}
         if(sn<0){p.z = -p.z;}
