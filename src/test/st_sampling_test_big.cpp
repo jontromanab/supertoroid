@@ -34,22 +34,21 @@ int main(int argc, char **argv)
 {
   pointCloudPtr cloud_combined(new pcl::PointCloud<PointT>());
   pointCloudPtr cloud(new pcl::PointCloud<PointT>());
-
   for (double i=0.0;i<=2.5;i+=0.5){
-    for (double j=0.0;j<=2.5;j+=0.5){
-      if(i==0.0)
-        i+=0.1;
-      if(j==0.0)
-        j+=0.1;
-      cloud = create_st_cloud(i,j, j+0.2, (2.5-i)+0.2, 0.0);
-      std::cout<<"Creating cloud# "<<"e1: "<<i<<" e2: "<<j<<" x: "<<j<<" y: "<<2.5-i<<std::endl;
-      if(i==0.1)
-        i-=0.1;
-      if(j==0.1)
-        j-=0.1;
-      *cloud_combined+=*cloud;
+      for (double j=0.0;j<=2.5;j+=0.5){
+        if(i==0.0)
+          i+=0.1;
+        if(j==0.0)
+          j+=0.1;
+        cloud = create_st_cloud(i,j, j*2.0, (2.5-i)*2.0, 0.0);
+        std::cout<<"Creating cloud# "<<"e1: "<<i<<" e2: "<<j<<" x: "<<j*2.0<<" y: "<<(2.5-i)*2.0<<std::endl;
+        if(i==0.1)
+          i-=0.1;
+        if(j==0.1)
+          j-=0.1;
+        *cloud_combined+=*cloud;
+      }
     }
-  }
 
   pcl::io::savePCDFileASCII ("big_supertoroid.pcd", *cloud_combined);
   std::cerr << "Saved " << cloud_combined->points.size () << " data points to big_supertoroid.pcd." << std::endl;

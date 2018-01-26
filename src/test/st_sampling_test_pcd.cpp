@@ -30,8 +30,8 @@ int main(int argc, char *argv[])
   super2.a2 = 0.1;
   super2.a3 = 0.1;
   super2.a4 = 2.0;
-  super2.e1 = 0.5;
-  super2.e2 = 0.5;
+  super2.e1 = 2.0;
+  super2.e2 = 2.0;
   geometry_msgs::Pose pose2;
   pose2.position.x = 0.3;
   pose2.position.y = 0.0;
@@ -44,8 +44,8 @@ int main(int argc, char *argv[])
   super3.a2 = 0.1;
   super3.a3 = 0.1;
   super3.a4 = 2.0;
-  super3.e1 = 0.5;
-  super3.e2 = 0.5;
+  super3.e1 = 2.0;
+  super3.e2 = 2.0;
   geometry_msgs::Pose pose3;
   pose3.position.x = -0.3;
   pose3.position.y = 0.0;
