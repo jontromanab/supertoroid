@@ -74,7 +74,7 @@ int main(int argc, char *argv[])
   std::cout<<"Size of the third sampled cloud: "<<cloud3->points.size()<<std::endl;
   *cloud_combined+= *cloud3;
 
-  pcl::io::savePCDFileASCII ("/home/abhi/Desktop/supertoroid.pcd", *cloud_combined);
+  pcl::io::savePCDFileASCII ("supertoroid_test.pcd", *cloud_combined);
   std::cerr << "Saved " << cloud_combined->points.size () << " data points to supertoroid.pcd." << std::endl;
   return 0;
 
