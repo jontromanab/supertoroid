@@ -40,8 +40,11 @@ int main(int argc, char **argv)
           i+=0.1;
         if(j==0.0)
           j+=0.1;
-        cloud = create_st_cloud(i,j, j*2.0, (2.5-i)*2.0, 0.0);
-        std::cout<<"Creating cloud# "<<"e1: "<<i<<" e2: "<<j<<" x: "<<j*2.0<<" y: "<<(2.5-i)*2.0<<std::endl;
+
+        cloud = create_st_cloud(i,j, j*2.0, (2.5-i)*2.0, 0.0); // for a1, a2, a3 = 0.1, a4 = 2.0
+        //cloud = create_st_cloud(i,j, j/10.0, (2.5-i)/10.0, 0.0); // for a1, a2, a3 = 0.01, a4 = 0.2
+        std::cout<<"Creating cloud# "<<"e1: "<<i<<" e2: "<<j<<" x: "<<j*2.0<<" y: "<<(2.5-i)*2.0<<std::endl;// for a1, a2, a3 = 0.1, a4 = 2.0
+        //std::cout<<"Creating cloud# "<<"e1: "<<i<<" e2: "<<j<<" x: "<< j/10.0<<" y: "<<(2.5-i)/10.0<<std::endl; // for a1, a2, a3 = 0.01, a4 = 0.2
         if(i==0.1)
           i-=0.1;
         if(j==0.1)
