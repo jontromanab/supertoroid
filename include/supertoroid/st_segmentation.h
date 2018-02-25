@@ -30,11 +30,10 @@ public:
     double min_z;
     double max_z;
   };
-  Segmentation(const CloudPtr& input_cloud, const Parameters& param);
+
   Segmentation(const CloudPtr &input_cloud, const Parameters &param, const ws_Parameters& ws_param);
   bool segment();
   bool initialized;
-  bool ws_filter_;
   void getTablecloud(CloudPtr &table_cloud) const;
   void getObjectsOnTable(CloudPtr& objects_on_table) const;
   void getWsCloud(CloudPtr& ws_cloud) const ;

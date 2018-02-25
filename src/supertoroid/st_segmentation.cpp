@@ -2,15 +2,6 @@
 #include<pcl/filters/crop_box.h>
 
 
-Segmentation::Segmentation(const CloudPtr &input_cloud, const Parameters &param)
-  :table_plane_cloud_(new PointCloud), objects_on_table_(new PointCloud){
-  cloud_ = input_cloud;
-  this->zmin_ = param.zmin;
-  this->zmax_ = param.zmax;
-  this->initialized = true;
-  this->ws_filter_ = false;
-}
-
 Segmentation::Segmentation(const CloudPtr &input_cloud, const Parameters &param,const ws_Parameters& ws_param)
   :table_plane_cloud_(new PointCloud), objects_on_table_(new PointCloud), ws_cloud_(new PointCloud), filtered_cloud_
 (new PointCloud){
@@ -25,7 +16,6 @@ Segmentation::Segmentation(const CloudPtr &input_cloud, const Parameters &param,
   this->max_y_ = ws_param.max_y;
   this->min_z_ = ws_param.min_z;
   this->max_z_ = ws_param.max_z;
-  this->ws_filter_ = true;
 }
 
 
