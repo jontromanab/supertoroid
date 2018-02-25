@@ -29,9 +29,9 @@ int main(int argc, char *argv[])
   super2.a1 = 0.1;
   super2.a2 = 0.1;
   super2.a3 = 0.1;
-  super2.a4 = 2.0;
-  super2.e1 = 2.0;
-  super2.e2 = 2.0;
+  super2.a4 = 0.2;
+  super2.e1 = 1.0;
+  super2.e2 = 1.0;
   geometry_msgs::Pose pose2;
   pose2.position.x = 0.3;
   pose2.position.y = 0.0;
@@ -43,9 +43,9 @@ int main(int argc, char *argv[])
   super3.a1 = 0.1;
   super3.a2 = 0.1;
   super3.a3 = 0.1;
-  super3.a4 = 2.0;
-  super3.e1 = 2.0;
-  super3.e2 = 2.0;
+  super3.a4 = 1.5;
+  super3.e1 = 1.0;
+  super3.e2 = 1.0;
   geometry_msgs::Pose pose3;
   pose3.position.x = -0.3;
   pose3.position.y = 0.0;
@@ -61,7 +61,7 @@ int main(int argc, char *argv[])
   *cloud_combined+= *cloud;*/
 
   Sampling *samp2 = new Sampling(super2);
-  samp2->sample_proper();
+  samp2->sample_new();
   pcl::PointCloud<PointT>::Ptr cloud2(new pcl::PointCloud<PointT>);
   samp2->getCloud(cloud2);
   std::cout<<"Size of the second sampled cloud: "<<cloud2->points.size()<<std::endl;

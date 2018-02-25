@@ -40,7 +40,7 @@ public:
   void getWsCloud(CloudPtr& ws_cloud) const ;
 
 private:
-  void detectObjectsOntable(CloudPtr cloud, double zmin, double zmax, bool filter_input_cloud);
+  void detectObjectsOntable(CloudPtr cloud, double zmin, double zmax);
 
 
   CloudPtr cloud_;
@@ -48,8 +48,6 @@ private:
   CloudPtr ws_cloud_;
   CloudPtr table_plane_cloud_;
   CloudPtr objects_on_table_;
-
-  PointCloud convexHull_;
   pcl::ModelCoefficients plane_coefficients_;
 
   double zmin_;

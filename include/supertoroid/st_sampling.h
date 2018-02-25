@@ -15,6 +15,7 @@ public:
   Sampling(const supertoroid::st& st_params);
   void sample();
   void sample_proper();
+  void sample_new();
 
   void getCloud(pcl::PointCloud<PointT>::Ptr& cloud);
   void getCloud(sensor_msgs::PointCloud2& cloud_ros);
