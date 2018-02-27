@@ -33,6 +33,20 @@ void create_transformation_matrix(const double tx, const double ty, const double
   trans_mat = translation_matrix * rot_matrix;
 }
 
+void getParamFromTransform(const Eigen::Affine3d& trans, double& tx, double& ty, double& tz, double& ax,
+                           double& ay, double& az){
+  Eigen::Vector3d t = trans.translation();
+  Eigen::Matrix3d rot_matrix = trans.rotation();
+  tx = t(0);
+  ty = t(1);
+  tz = t(2);
+  Eigen::Vector3d rot_angle = rot_matrix.eulerAngles(0,1,2);
+  ax = rot_angle[0];
+  ay = rot_angle[1];
+  az = rot_angle[2];
+}
+
+
 
 void st_clampParameters(double& e1_clamped, double& e2_clamped)
 {
@@ -94,7 +108,10 @@ double st_error(const pcl::PointCloud<PointT>::Ptr cloud, const supertoroid::st 
 
 
 
-double st_function(const double &x, const double &y, const double &z, const double &a, const double &b, const double &c, const double &d, const double &e1,
+double st_function(const double &x, const double &y,
+                   const double &z, const double &a,
+                   const double &b, const double &c,
+                   const double &d, const double &e1,
                    const double &e2)
 {
   double e1_clamped = e1;
@@ -105,22 +122,42 @@ double st_function(const double &x, const double &y, const double &z, const doub
   double t1 = pow(std::abs(x / a), 2.0/e2_clamped);
   double t2 = pow(std::abs(y / b), 2.0/e2_clamped);
   double t3 = pow(std::abs(z / c), 2.0/e1_clamped);
-  double f = (pow(std::abs(t1+t2), e2_clamped/e1_clamped)  - d)+ t3;
-  double value = (pow(f, e1_clamped/2.0) - 1.0) * pow(a * b * c, 0.25);
+  double g = pow(std::abs(pow((t1+t2), e2_clamped/e1_clamped)-d), 2.0/e1_clamped) + t3;
+  //double f = pow((pow(std::abs(t1+t2), e2_clamped/e1_clamped)  - d,2.0/e1_clamped)+ t3;
+  //double value = pow((g - 1.0),e1_clamped);// * pow(a * b * c * d, 0.025);
+  double value = (pow(g, e1_clamped/2.0) - 1.0);//* pow(a * b * c *d, 0.25);
   return (value);
 }
 
-void getParamFromTransform(const Eigen::Affine3d& trans, double& tx, double& ty, double& tz, double& ax,
-                           double& ay, double& az){
-  Eigen::Vector3d t = trans.translation();
-  Eigen::Matrix3d rot_matrix = trans.rotation();
-  tx = t(0);
-  ty = t(1);
-  tz = t(2);
-  Eigen::Vector3d rot_angle = rot_matrix.eulerAngles(0,1,2);
-  ax = rot_angle[0];
-  ay = rot_angle[1];
-  az = rot_angle[2];
+double st_function_b2(const double& x, const double& y, const double& a, const double& b,
+                      const double& e2)
+{
+  double e2_clamped = e2;
+  double e1 = 1.0;
+  st_clampParameters(e1, e2_clamped);
+  double t1 = pow(std::abs(x/a), 2.0/e2_clamped);
+  double t2 = pow(std::abs(y/b), 2.0/e2_clamped);
+  double t3 = t1 + t2;
+  double value = (pow(t3, e2_clamped/2.0) - 1.0);
+  return value;
+}
+
+double st_function_b1(const double &x, const double &y,
+                      const double &z, const double &a,
+                      const double &b, const double &c,
+                      const double &d, const double &e1,
+                      const double &e2)
+{
+  double e1_clamped = e1;
+  double e2_clamped = e2;
+  st_clampParameters(e1_clamped, e2_clamped);
+  double t1 = st_function_b2(x, y, a, b, e2)*sqrt((x*x)+(y*y));
+  double t2 = pow(std::abs(t1/d), 2.0/e1_clamped);
+  double t3 = pow(std::abs(z/c), 2.0/e1_clamped);
+  double t4 = t2+t3;
+  double value = (pow(t4, e1_clamped/2.0)-1.0);
+  return value;
+
 }
 
 

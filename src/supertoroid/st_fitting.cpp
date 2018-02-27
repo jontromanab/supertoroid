@@ -68,7 +68,9 @@ int Fitting::OptimizationFunctor::operator ()(const Eigen::VectorXd &xvec, Eigen
     p.x = xyz_tr[0];
     p.y = xyz_tr[1];
     p.z = xyz_tr[2];
-    fvec[i] = op * st_function(xyz_tr[0], xyz_tr[1], xyz_tr[2], a,b,c,d,e1,e2);
+    //fvec[i] = op * st_function(xyz_tr[0], xyz_tr[1], xyz_tr[2], a,b,c,d,e1,e2);
+    fvec[i] = st_function_b1(xyz_tr[0], xyz_tr[1], xyz_tr[2], a,b,c,d,e1,e2)
+        *sqrt((st_function_b2(xyz_tr[0], xyz_tr[1], a, b, e2)*((p.x*p.x)+(p.y*p.y))+(p.z*p.z)));
   }
   return (0);
 }
@@ -76,12 +78,15 @@ int Fitting::OptimizationFunctor::operator ()(const Eigen::VectorXd &xvec, Eigen
 void Fitting::fit(){
   double min_fit_error = std::numeric_limits<double>::max();
   supertoroid::st min_param;
-  for(int i=0;i<1;++i)
+  for(int i=0;i<3;++i)
   {
     double error;
-    setPreAlign(true, 1);
+    setPreAlign(true, i);
     supertoroid::st param;
     fit_param(param, error);
+    std::cout<<"Error is: "<<error<<std::endl;
+    std::cout<<"Min param is: "<<param.a1<<" "<<param.a2<<" "<<param.a3<<" "<<param.a4<<std::endl;
+    std::cout<<param.e1<<" "<<param.e2<<std::endl;
     if(error<min_fit_error){
       min_fit_error = error;
       min_param = param;
@@ -106,11 +111,11 @@ void Fitting::fit_param(supertoroid::st &param, double &final_error)
 
   int n_unknowns = 12;
   Eigen::VectorXd xvec(n_unknowns);
-  xvec[0] = variances(0) * 3.;
-  xvec[1] = variances(1) * 3.;
-  xvec[2] = variances(2) * 3.;
-  xvec[3] =  variances(2) * 3.;
-  xvec[4] =xvec[5] =  1.0;
+  xvec[0] = variances(0) * 1.;
+  xvec[1] = variances(1) * 1.;
+  xvec[2] = variances(2) * 1.;
+  xvec[3] = variances(2) * 10.;
+  xvec[4] = xvec[5] =  1.0;
   xvec[6] =  xvec[7] =  xvec[8] =  xvec[9] = xvec[10] =  xvec[11] =0.;
 
   OptimizationFunctor functor(prealigned_cloud_->size(), this);
