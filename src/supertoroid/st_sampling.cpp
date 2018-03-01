@@ -104,7 +104,7 @@ void Sampling::sample()
         p.x = params_.a1 * (params_.a4+signof(cn)*pow(fabs(cn), params_.e1)) * pow (fabs(cw), params_.e2);
         p.y = params_.a2 * (params_.a4+signof(cn)*pow(fabs(cn), params_.e1)) * pow (fabs(sw), params_.e2);
         p.z = params_.a3 * pow(fabs(sn), params_.e1);
-        p.r =  r_*255;
+        p.r = r_*255;
         p.g = g_*255;
         p.b = b_*255;
 

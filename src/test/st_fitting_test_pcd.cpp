@@ -32,7 +32,7 @@ int main(int argc, char *argv[])
   delete fit;
 
   Sampling *sam = new Sampling(min_param);
-  sam->sample();
+  sam->sample_proper();
   pcl::PointCloud<PointT>::Ptr sampled_cloud(new pcl::PointCloud<PointT>);
   sam->getCloud(sampled_cloud);
   std::cout<<"Size of the sampled cloud: "<<sampled_cloud->points.size()<<std::endl;

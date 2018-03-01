@@ -60,6 +60,17 @@ void st_clampParameters(double& e1_clamped, double& e2_clamped)
     e2_clamped = 1.9;
 }
 
+void st_clampA4(double& a4_clamped){
+  /*double bigger = 0.0;
+  if(a1>a2) bigger = a1;
+  else bigger = a2;
+  if(a4_clamped < bigger * 100.)
+    a4_clamped = bigger * 100.;*/
+  a4_clamped = std::abs(a4_clamped*100.);
+
+
+}
+
 double st_function(const PointT& point, const supertoroid::st& param)
 {
   double e1_clamped = param.e1;
@@ -89,6 +100,41 @@ double st_function_scale_weighting(const PointT& point, const supertoroid::st& p
   return (value);
 }
 
+double st_function_b2(const double& x, const double& y, const double& a, const double& b,
+                      const double& e2)
+{
+  double e2_clamped = e2;
+  double e1 = 1.0;
+  st_clampParameters(e1, e2_clamped);
+  double t1 = pow(std::abs(x/a), 2.0/e2_clamped);
+  double t2 = pow(std::abs(y/b), 2.0/e2_clamped);
+  double t3 = t1 + t2;
+  double value = (pow(t3, e2_clamped/2.0)-1.0);
+  return value;
+}
+
+double st_function_b1(const double &x, const double &y,
+                      const double &z, const double &a,
+                      const double &b, const double &c,
+                      const double &d, const double &e1,
+                      const double &e2)
+{
+  double e1_clamped = e1;
+  double e2_clamped = e2;
+  st_clampParameters(e1_clamped, e2_clamped);
+  double a4_clamped = d;
+  st_clampA4(a4_clamped);
+  double t1 = st_function_b2(x, y, a, b, e2)*sqrt((x*x)+(y*y));
+  double t2 = pow(std::abs(t1/d), 2.0/e1_clamped);
+  double t3 = pow(std::abs(z/c), 2.0/e1_clamped);
+  double t4 = t2+t3;
+  double value = (pow(t4, e1_clamped/2.0)-1.0);
+  return std::abs(value);
+
+}
+
+
+
 double st_error(const pcl::PointCloud<PointT>::Ptr cloud, const supertoroid::st &param){
   Eigen::Affine3f transform;
   pose_to_transform(param.pose, transform);
@@ -96,8 +142,13 @@ double st_error(const pcl::PointCloud<PointT>::Ptr cloud, const supertoroid::st 
   pcl::transformPointCloud(*cloud, *new_cloud, transform);
   double error = 0.0;
   for(size_t i=0;i<new_cloud->size();++i){
-    double op =st_normPoint(new_cloud->at(i));
-    double val = op * st_function_scale_weighting(new_cloud->at(i), param);
+    //double op =st_normPoint(new_cloud->at(i));
+    //double val = op * st_function_scale_weighting(new_cloud->at(i), param);
+    double x = new_cloud->points.at(i).x;
+    double y = new_cloud->points.at(i).y;
+    double z = new_cloud->points.at(i).z;
+    double val = st_function_b1(x,y,z,param.a1,param.a2, param.a3, param.a4, param.e1, param.e2)
+        *sqrt((st_function_b2(x,y,param.a1, param.a2, param.e2)*((x*x)+(y*y))+(z*z)));
     error += val * val;
   }
   error /=new_cloud->size();
@@ -129,36 +180,6 @@ double st_function(const double &x, const double &y,
   return (value);
 }
 
-double st_function_b2(const double& x, const double& y, const double& a, const double& b,
-                      const double& e2)
-{
-  double e2_clamped = e2;
-  double e1 = 1.0;
-  st_clampParameters(e1, e2_clamped);
-  double t1 = pow(std::abs(x/a), 2.0/e2_clamped);
-  double t2 = pow(std::abs(y/b), 2.0/e2_clamped);
-  double t3 = t1 + t2;
-  double value = (pow(t3, e2_clamped/2.0) - 1.0);
-  return value;
-}
-
-double st_function_b1(const double &x, const double &y,
-                      const double &z, const double &a,
-                      const double &b, const double &c,
-                      const double &d, const double &e1,
-                      const double &e2)
-{
-  double e1_clamped = e1;
-  double e2_clamped = e2;
-  st_clampParameters(e1_clamped, e2_clamped);
-  double t1 = st_function_b2(x, y, a, b, e2)*sqrt((x*x)+(y*y));
-  double t2 = pow(std::abs(t1/d), 2.0/e1_clamped);
-  double t3 = pow(std::abs(z/c), 2.0/e1_clamped);
-  double t4 = t2+t3;
-  double value = (pow(t4, e1_clamped/2.0)-1.0);
-  return value;
-
-}
 
 
 #endif // UTIL_H

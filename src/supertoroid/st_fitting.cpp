@@ -111,10 +111,10 @@ void Fitting::fit_param(supertoroid::st &param, double &final_error)
 
   int n_unknowns = 12;
   Eigen::VectorXd xvec(n_unknowns);
-  xvec[0] = variances(0) * 1.;
-  xvec[1] = variances(1) * 1.;
-  xvec[2] = variances(2) * 1.;
-  xvec[3] = variances(2) * 10.;
+  xvec[0] = variances(0) * 3.;
+  xvec[1] = variances(1) * 3.;
+  xvec[2] = variances(2) * 3.;
+  xvec[3] = variances(0) * 300.;
   xvec[4] = xvec[5] =  1.0;
   xvec[6] =  xvec[7] =  xvec[8] =  xvec[9] = xvec[10] =  xvec[11] =0.;
 
@@ -129,9 +129,14 @@ void Fitting::fit_param(supertoroid::st &param, double &final_error)
   param.a4 = xvec[3];
   double e1 = xvec[4];
   double e2 = xvec[5];
+  //double a4 = xvec[3];
   st_clampParameters(e1, e2);
+  //std::cout<<"a4 is: "<<param.a4<<std::endl;
+  //st_clampA4(a4);
   param.e1 = e1;
   param.e2 = e2;
+  //param.a4 = a4;
+  //std::cout<<"a4 is: "<<param.a4<<std::endl;
   Eigen::Affine3d transform_lm;
   create_transformation_matrix(xvec[6], xvec[7], xvec[8], xvec[9], xvec[10], xvec[11], transform_lm);
 

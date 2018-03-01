@@ -23,13 +23,18 @@ int main(int argc, char *argv[])
   pose.orientation.w = 1.0;
   super1.pose = pose;
 
+  /**
+   * This is just to prove that both the sample and sample_new methods can provide the same results.
+   * If we change the a1 or a2 in the sample_new() method, we have to calculate the a4 and then a1 and a2 accordingly
+   * in the sample() method
+   */
 
 
   supertoroid::st super2;
-  super2.a1 = 0.1;
-  super2.a2 = 0.1;
+  super2.a1 = 0.01;
+  super2.a2 = 0.01;
   super2.a3 = 0.1;
-  super2.a4 = 0.2;
+  super2.a4 = 0.15;
   super2.e1 = 1.0;
   super2.e2 = 1.0;
   geometry_msgs::Pose pose2;
@@ -40,10 +45,10 @@ int main(int argc, char *argv[])
   super2.pose = pose2;
 
   supertoroid::st super3;
-  super3.a1 = 0.1;
-  super3.a2 = 0.1;
+  super3.a1 = 0.01;
+  super3.a2 = 0.01;
   super3.a3 = 0.1;
-  super3.a4 = 1.5;
+  super3.a4 = 15;
   super3.e1 = 1.0;
   super3.e2 = 1.0;
   geometry_msgs::Pose pose3;
