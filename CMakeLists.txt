@@ -63,6 +63,8 @@ add_library(st_fitting  src/supertoroid/st_fitting.cpp)
 add_library(st_segmentation src/supertoroid/st_segmentation.cpp)
 add_library(util  src/supertoroid/util.cpp)
 
+add_dependencies(st_fitting supertoroid_generate_messages_cpp )
+
 target_link_libraries(st_sampling  ${catkin_LIBRARIES}  ${PCL_LIBRARY_DIRS})
 target_link_libraries(st_fitting  ${catkin_LIBRARIES}  ${PCL_LIBRARY_DIRS})
 target_link_libraries(st_segmentation  ${catkin_LIBRARIES}  ${PCL_LIBRARY_DIRS})
@@ -91,6 +93,7 @@ target_link_libraries(st_segmentation_test_pcd st_segmentation  ${catkin_LIBRARI
 add_executable(st_fitting_test_pcd src/test/st_fitting_test_pcd.cpp)
 add_dependencies(st_fitting_test_pcd ${${PROJECT_NAME}_EXPORTED_TARGETS} ${catkin_EXPORTED_TARGETS})
 target_link_libraries(st_fitting_test_pcd st_fitting st_sampling ${catkin_LIBRARIES})
+
 
 #add_executable(openni_grabber src/test/openni_grabber.cpp)
 #target_link_libraries(openni_grabber  ${catkin_LIBRARIES} ${PCL_LIBRARIES})
