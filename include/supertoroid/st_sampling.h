@@ -16,6 +16,7 @@ public:
   void sample();
   void sample_proper();
   void sample_new();
+  void sample_pilu_fisher_st();
 
   void getCloud(pcl::PointCloud<PointT>::Ptr& cloud);
   void getCloud(sensor_msgs::PointCloud2& cloud_ros);
@@ -28,8 +29,7 @@ private:
   void transformCloud(const pcl::PointCloud<PointT>::Ptr &input_cloud,
                       pcl::PointCloud<PointT>::Ptr& output_cloud);
 
-  void sample_superEllipse(const double a1, const double a2, const double a4,
-                           const double e, const int N, pcl::PointCloud<PointT>::Ptr &cloud);
+//  void sample_superEllipse_withOffset(const double a1, const double a2, const double a4, const double e, const int N, pcl::PointCloud<PointT>::Ptr &cloud);
 
 };
 
